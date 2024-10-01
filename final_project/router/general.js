@@ -4,12 +4,6 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
-function doesExist(username) {
-    let filteredUsers = users.filter(user=> user.username === username);
-
-    return filteredUsers.length>0;
-}
-
 public_users.post("/register", (req,res) => {
   //Write your code here
 
