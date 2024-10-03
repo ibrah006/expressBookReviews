@@ -4,6 +4,8 @@ const session = require('express-session')
 const customer_routes = require('./router/auth_users.js').authenticated;
 const genl_routes = require('./router/general.js').general;
 
+const getBooks = require('./router/general.js').getBooks;
+
 const app = express();
 
 app.use(express.json());
@@ -14,11 +16,11 @@ app.use("/customer/auth/*", function auth(req,res,next){
 //Write the authenication mechanism here
 
     // NOTE: for debug purpose
-    req.session.authorization = {
-        username: "Ibrah"
-    }
-    next();
-    return;
+    // req.session.authorization = {
+    //     username: "Ibrah"
+    // }
+    // next();
+    // return;
 
     if (req.session.authorization) {
         const token = req.session.authorization["token"];
@@ -42,4 +44,4 @@ const PORT =5000;
 app.use("/customer", customer_routes);
 app.use("/", genl_routes);
 
-app.listen(PORT,()=>console.log("Server is running"));
+await app.listen(PORT,()=> console.log("Server is running"));

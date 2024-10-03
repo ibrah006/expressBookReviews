@@ -1,4 +1,4 @@
-import axios from 'axios';
+
 
 const express = require('express');
 let books = require("./booksdb.js");
@@ -6,7 +6,7 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
-const TARGETURL = "https://ibrahimmn006-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai";
+let axios = require("axios");
 
 public_users.post("/register", (req,res) => {
   //Write your code here
@@ -29,12 +29,26 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/', function (req, res) {
+public_users.get('/', async function (req, res) {
   //Write your code here
 
-//   result = await axios.get(TARGETURL);
-  return res.send(JSON.stringify(books));
+  new Promise((resolve, reject)=> {
+    resolve(books);
+  })
+  .then(books=> {
+    return res.send(JSON.stringify(books));
+  })
 });
+
+// async function getBooks(callback) {
+//     const response = await axios.get("https://ibrahimmn006-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/");
+
+//     callback(response.data());
+// }
+
+// getBooks((books)=> {
+//     console.log(`Books available: ${books}`)
+// });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
