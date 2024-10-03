@@ -53,10 +53,11 @@ public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
   return res.send(JSON.stringify(books[req.params.isbn]))
 });
-async function getBookByISBN(isbn) {
-
-    const response = await axios.get(`${TARGETURL}/isbn/${isbn}`);
-    console.log(`Getting book for ISBN ${isbn}: ${JSON.stringify(response.data)}`);
+function getBookByISBN(isbn) {
+    axios.get(`${TARGETURL}/isbn/${isbn}`)
+        .then((response)=> {
+            console.log(JSON.stringify(response.data));
+        });
 }
 getBookByISBN(1);
 
