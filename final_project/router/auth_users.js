@@ -14,7 +14,7 @@ const isValid = (username)=>{ //returns boolean
 
 const authenticatedUser = (username,password)=>{ //returns boolean
 //write code to check if username and password match the one we have in records.
-    let filteredUsers = users.filter(user=> user.username === usernmae && user.password === password);
+    let filteredUsers = users.filter(user=> user.username === username && user.password === password);
 
     return filteredUsers.length>0;
 }
@@ -26,7 +26,7 @@ regd_users.post("/login", (req,res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  if (!username || password) {
+  if (!username || !password) {
     return res.status(404).json({message: "Failed to login!"});
   }
 
@@ -53,14 +53,14 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   const isbn = Number(req.params.isbn);
   const review = req.body.review;
 
-  const username = req.session.authorization["username"];
+  const username = req.session.authorization.username;
 
   const bookTitle = books[isbn].title;
 
   if (review && bookTitle) {
-    const bookReviewByUser = books[isbn].review["username"];
+    const bookReviewByUser = books[isbn].reviews[username];
 
-    books[isbn].review[username] = review;
+    books[isbn].reviews[username] = review;
 
     return res.status(200).json({
         message: (bookReviewByUser? "Succcessfully made changes" : "Successfully added review") +  ` for book ${bookTitle}.`

@@ -1,8 +1,12 @@
+import axios from 'axios';
+
 const express = require('express');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+
+const TARGETURL = "https://ibrahimmn006-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai";
 
 public_users.post("/register", (req,res) => {
   //Write your code here
@@ -12,7 +16,7 @@ public_users.post("/register", (req,res) => {
 
   if (username && password) {
     
-    if (!doesExist(username)) {
+    if (!isValid(username)) {
         users.push({"username": username, "password": password});
 
         return res.status(200).json({"message": `Successfully registered user with username ${username}!`});
@@ -25,8 +29,10 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
+public_users.get('/', function (req, res) {
   //Write your code here
+
+//   result = await axios.get(TARGETURL);
   return res.send(JSON.stringify(books));
 });
 
