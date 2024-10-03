@@ -8,9 +8,7 @@ const public_users = express.Router();
 
 let axios = require("axios");
 
-const prompt = require('prompt-sync')();
-
-const TARGETURL = "https://ibrahimmn006-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai";
+const TARGETURL = "http://localhost:5000"; // change to your test endpoint
 
 public_users.post("/register", (req,res) => {
   //Write your code here
