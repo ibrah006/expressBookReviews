@@ -68,13 +68,13 @@ public_users.get('/author/:author',function (req, res) {
 
   let filteredBooks = Object.values(books).filter((book)=> author === book.author);
 
-  return res.send(JSON.stringify(filteredBooks[0]));
+  return res.send(JSON.stringify(filteredBooks));
 });
-async function getBookByAuthor(author) {
+async function getBooksByAuthor(author) {
     const response = await axios.get(`${TARGETURL}/author/${author}`);
     console.log(`Getting book with Author '${author}': ${JSON.stringify(response.data)}`);
 }
-getBookByAuthor("Dante Alighieri");
+getBooksByAuthor("Dante Alighieri");
 
 
 // Get all books based on title
@@ -87,11 +87,11 @@ public_users.get('/title/:title',function (req, res) {
 
   return res.send(JSON.stringify(filteredBooks));
 });
-async function getBookByTitle(title) {
+async function getBooksByTitle(title) {
     const response = await axios.get(`${TARGETURL}/title/${title}`);
     console.log(`Getting book details from title '${title}': ${JSON.stringify(response.data)}`);
 }
-getBookByTitle("Pride and Prejudice");
+getBooksByTitle("Pride and Prejudice");
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
