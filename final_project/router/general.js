@@ -8,6 +8,10 @@ const public_users = express.Router();
 
 let axios = require("axios");
 
+const prompt = require('prompt-sync')();
+
+const TARGETURL = "https://ibrahimmn006-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai";
+
 public_users.post("/register", (req,res) => {
   //Write your code here
 
@@ -30,37 +34,48 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/', function (req, res) {
-  //Write your code here
-
-//   new Promise((resolve, reject)=> {
-//     resolve(books);
-//   })
-//   .then(books=> {
-//     return res.send(JSON.stringify(books));
-//   })
-
     return res.send(JSON.stringify(books))
 });
 
+async function getBooks(callback) {
+    const response = await axios.get(TARGETURL);
+
+    callback(JSON.stringify(response.data));
+}
+
+getBooks((storeBooks)=> {
+    console.log(`Books available: ${storeBooks}`)
+});
 
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
   return res.send(JSON.stringify(books[req.params.isbn]))
- });
+});
+async function getBookByISBN(isbn) {
+
+    const response = await axios.get(`${TARGETURL}/isbn/${isbn}`);
+    console.log(`Getting book for ISBN ${isbn}: ${JSON.stringify(response.data)}`);
+}
+getBookByISBN(1);
+
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
-
   const author = req.params.author;
 
   let filteredBooks = Object.values(books).filter((book)=> author === book.author);
 
-  return res.send(JSON.stringify(filteredBooks));
-
+  return res.send(JSON.stringify(filteredBooks[0]));
 });
+async function getBookByAuthor(author) {
+    const response = await axios.get(`${TARGETURL}/author/${author}`);
+    console.log(`Getting book with Author '${author}': ${JSON.stringify(response.data)}`);
+}
+getBookByAuthor("Dante Alighieri");
+
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
@@ -72,6 +87,11 @@ public_users.get('/title/:title',function (req, res) {
 
   return res.send(JSON.stringify(filteredBooks));
 });
+async function getBookByTitle(title) {
+    const response = await axios.get(`${TARGETURL}/title/${title}`);
+    console.log(`Getting book details from title '${title}': ${JSON.stringify(response.data)}`);
+}
+getBookByTitle("Pride and Prejudice");
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
