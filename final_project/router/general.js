@@ -34,17 +34,17 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/', function (req, res) {
-    return res.send(JSON.stringify(books))
+    return res.send(`books: ${JSON.stringify(books, null, 2)}`)
 });
 
 async function getBooks(callback) {
     const response = await axios.get(TARGETURL);
 
-    callback(JSON.stringify(response.data));
+    callback(response.data);
 }
 
 getBooks((storeBooks)=> {
-    console.log(`Books available: ${storeBooks}`)
+    console.log(storeBooks);
 });
 
 
@@ -56,8 +56,8 @@ public_users.get('/isbn/:isbn',function (req, res) {
 function getBookByISBN(isbn) {
     axios.get(`${TARGETURL}/isbn/${isbn}`)
         .then((response)=> {
-            console.log(JSON.stringify(response.data));
-        });
+            console.log(`Getting book by ISBN: ${JSON.stringify(response.data)}`);
+        })
 }
 getBookByISBN(1);
 
@@ -73,7 +73,7 @@ public_users.get('/author/:author',function (req, res) {
 });
 async function getBooksByAuthor(author) {
     const response = await axios.get(`${TARGETURL}/author/${author}`);
-    console.log(`Getting book with Author '${author}': ${JSON.stringify(response.data)}`);
+    console.log(`Getting book with Author '${author}': ${JSON.stringify(response.data, 0, 2)}`);
 }
 getBooksByAuthor("Dante Alighieri");
 
@@ -88,11 +88,11 @@ public_users.get('/title/:title',function (req, res) {
 
   return res.send(JSON.stringify(filteredBooks));
 });
-async function getBooksByTitle(title) {
+async function getBookByTitle(title) {
     const response = await axios.get(`${TARGETURL}/title/${title}`);
-    console.log(`Getting book details from title '${title}': ${JSON.stringify(response.data)}`);
+    console.log(`Getting book details from title '${title}': ${JSON.stringify(response.data, 0, 2)}`);
 }
-getBooksByTitle("Pride and Prejudice");
+getBookByTitle("Pride and Prejudice");
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
